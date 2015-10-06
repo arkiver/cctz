@@ -23,36 +23,36 @@
 
 namespace cctz {
 
-// A simple interface used to hide time-zone complexities from TimeZone::Impl.
-// Subclasses implement the functions for civil-time conversions in the zone.
-class TimeZoneIf {
- public:
-  // A factory function for TimeZoneIf implementations.
-  static std::unique_ptr<TimeZoneIf> Load(const std::string& name);
+  // A simple interface used to hide time-zone complexities from TimeZone::Impl.
+  // Subclasses implement the functions for civil-time conversions in the zone.
+  class TimeZoneIf {
+  public:
+    // A factory function for TimeZoneIf implementations.
+    static std::unique_ptr<TimeZoneIf> Load(const std::string& name);
 
-  virtual ~TimeZoneIf() {}
+    virtual ~TimeZoneIf() {}
 
-  virtual Breakdown BreakTime(const time_point& tp) const = 0;
-  virtual TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
-                                int hour, int min, int sec) const = 0;
+    virtual Breakdown BreakTime(const time_point& tp) const = 0;
+    virtual TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
+                                  int hour, int min, int sec) const = 0;
 
- protected:
-  TimeZoneIf() {}
-};
+  protected:
+    TimeZoneIf() {}
+  };
 
-// Convert a time_point to a count of seconds since the Unix epoch.
-inline int64_t ToUnixSeconds(const time_point& tp) {
-  return std::chrono::duration_cast<std::chrono::duration<int64_t>>(
-             tp - std::chrono::system_clock::from_time_t(0))
+  // Convert a time_point to a count of seconds since the Unix epoch.
+  inline int64_t ToUnixSeconds(const time_point& tp) {
+    return std::chrono::duration_cast<std::chrono::duration<int64_t>>(
+                                                                      tp - std::chrono::system_clock::from_time_t(0))
       .count();
-}
+  }
 
-// Convert a count of seconds since the Unix epoch to a time_point.
-inline time_point FromUnixSeconds(int64_t t) {
-  return std::chrono::time_point_cast<time_point::duration>(
-             std::chrono::system_clock::from_time_t(0)) +
-         std::chrono::seconds(t);
-}
+  // Convert a count of seconds since the Unix epoch to a time_point.
+  inline time_point FromUnixSeconds(int64_t t) {
+    return std::chrono::time_point_cast<time_point::duration>(
+                                                              std::chrono::system_clock::from_time_t(0)) +
+      std::chrono::seconds(t);
+  }
 
 }  // namespace cctz
 

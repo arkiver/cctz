@@ -24,31 +24,31 @@
 
 namespace cctz {
 
-// TimeZone::Impl is the internal object referenced by a cctz::TimeZone.
-class TimeZone::Impl {
- public:
-  // Load a named time zone. Returns false if the name is invalid, or if
-  // some other kind of error occurs. Note that loading "UTC" never fails.
-  static bool LoadTimeZone(const std::string& name, TimeZone* tz);
+  // TimeZone::Impl is the internal object referenced by a cctz::TimeZone.
+  class TimeZone::Impl {
+  public:
+    // Load a named time zone. Returns false if the name is invalid, or if
+    // some other kind of error occurs. Note that loading "UTC" never fails.
+    static bool LoadTimeZone(const std::string& name, TimeZone* tz);
 
-  // Dereferences the TimeZone to obtain its Impl.
-  static const TimeZone::Impl& get(const TimeZone& tz);
+    // Dereferences the TimeZone to obtain its Impl.
+    static const TimeZone::Impl& get(const TimeZone& tz);
 
-  // Breaks a time_point down to civil-time components in this time zone.
-  Breakdown BreakTime(const time_point& tp) const;
+    // Breaks a time_point down to civil-time components in this time zone.
+    Breakdown BreakTime(const time_point& tp) const;
 
-  // Converts the civil-time components in this time zone into a time_point.
-  // That is, the opposite of BreakTime(). The requested civil time may be
-  // ambiguous or illegal due to a change of UTC offset.
-  TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
-                        int hour, int min, int sec) const;
+    // Converts the civil-time components in this time zone into a time_point.
+    // That is, the opposite of BreakTime(). The requested civil time may be
+    // ambiguous or illegal due to a change of UTC offset.
+    TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
+                          int hour, int min, int sec) const;
 
- private:
-  explicit Impl(const std::string& name);
+  private:
+    explicit Impl(const std::string& name);
 
-  const std::string name_;
-  std::unique_ptr<TimeZoneIf> zone_;
-};
+    const std::string name_;
+    std::unique_ptr<TimeZoneIf> zone_;
+  };
 
 }  // namespace cctz
 

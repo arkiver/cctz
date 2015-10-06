@@ -21,44 +21,44 @@
 
 namespace cctz {
 
-TimeZone UTCTimeZone() {
-  TimeZone tz;
-  LoadTimeZone("UTC", &tz);
-  return tz;
-}
-
-TimeZone LocalTimeZone() {
-  const char* zone = std::getenv("TZ");
-  if (zone != nullptr) {
-    if (*zone == ':') ++zone;
-  } else {
-    zone = "localtime";
-  }
-  TimeZone tz;
-  if (!LoadTimeZone(zone, &tz)) {
+  TimeZone UTCTimeZone() {
+    TimeZone tz;
     LoadTimeZone("UTC", &tz);
+    return tz;
   }
-  return tz;
-}
 
-bool LoadTimeZone(const std::string& name, TimeZone* tz) {
-  return TimeZone::Impl::LoadTimeZone(name, tz);
-}
+  TimeZone LocalTimeZone() {
+    const char* zone = std::getenv("TZ");
+    if (zone != nullptr) {
+      if (*zone == ':') ++zone;
+    } else {
+      zone = "localtime";
+    }
+    TimeZone tz;
+    if (!LoadTimeZone(zone, &tz)) {
+      LoadTimeZone("UTC", &tz);
+    }
+    return tz;
+  }
 
-Breakdown BreakTime(const time_point& tp, const TimeZone& tz) {
-  return TimeZone::Impl::get(tz).BreakTime(tp);
-}
+  bool LoadTimeZone(const std::string& name, TimeZone* tz) {
+    return TimeZone::Impl::LoadTimeZone(name, tz);
+  }
 
-time_point MakeTime(int64_t year, int mon, int day,
-                    int hour, int min, int sec,
-                    const TimeZone& tz) {
-  return MakeTimeInfo(year, mon, day, hour, min, sec, tz).pre;
-}
+  Breakdown BreakTime(const time_point& tp, const TimeZone& tz) {
+    return TimeZone::Impl::get(tz).BreakTime(tp);
+  }
 
-TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
+  time_point MakeTime(int64_t year, int mon, int day,
                       int hour, int min, int sec,
                       const TimeZone& tz) {
-  return TimeZone::Impl::get(tz).MakeTimeInfo(year, mon, day, hour, min, sec);
-}
+    return MakeTimeInfo(year, mon, day, hour, min, sec, tz).pre;
+  }
+
+  TimeInfo MakeTimeInfo(int64_t year, int mon, int day,
+                        int hour, int min, int sec,
+                        const TimeZone& tz) {
+    return TimeZone::Impl::get(tz).MakeTimeInfo(year, mon, day, hour, min, sec);
+  }
 
 }  // namespace cctz
